@@ -1,30 +1,30 @@
 
 
-pub trait Capacity {
+trait Capacity {
 
-  fn bytes(&self) -> i64 where Self: Sized;
+  fn bytes(&self) -> i64;
 
-  fn kilobytes(&self) -> i64 where Self:Sized {
+  fn kilobytes(&self) -> i64 {
     self.bytes().rotate_left(10)
   }
 
-  fn megabytes(&self) -> i64 where Self:Sized {
+  fn megabytes(&self) -> i64 {
     self.kilobytes().rotate_left(10)
   }
 
-  fn gigabytes(&self) -> i64 where Self:Sized {
+  fn gigabytes(&self) -> i64 {
     self.megabytes().rotate_left(10)
   }
 
-  fn terabytes(&self) -> i64 where Self:Sized {
+  fn terabytes(&self) -> i64 {
     self.gigabytes().rotate_left(10)
   }
 
-  fn petabytes(&self) -> i64 where Self:Sized {
+  fn petabytes(&self) -> i64 {
     self.terabytes().rotate_left(10)
   }
 
-  fn exabytes(&self) -> i64 where Self:Sized {
+  fn exabytes(&self) -> i64 {
     self.petabytes().rotate_left(10)
   }
 }
@@ -35,15 +35,25 @@ impl Capacity for i64 {
   }
 }
 
-//pub struct Unparseable;
+impl Capacity for Size {
+  fn bytes(&self) -> i64 {
+    (*self).bytes
+  }
+}
 
-//impl FromStr for Capacity {
-//  type Err = Unparseable;
-//  #[inline]
-//  fn from_str(s: &str) -> Result<Capacity, Unparseable> {
-//    Err(Unparseable)
-//  }
-//}
+struct Size {
+  bytes: i64
+}
+
+trait IntoCapacity {
+  fn into(&self) -> Size;
+}
+
+impl IntoCapacity for i64 {
+  fn into(&self) -> Size {
+    Size { bytes: *self }
+  }
+}
 
 #[test]
 fn test_bytes() {
