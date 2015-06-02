@@ -12,7 +12,7 @@ pub trait Capacity {
     self.kilobytes().rotate_left(10)
   }
 
-  fn gigabytes(&self) -> i64 where Self:Sized{
+  fn gigabytes(&self) -> i64 where Self:Sized {
     self.megabytes().rotate_left(10)
   }
 
@@ -20,7 +20,7 @@ pub trait Capacity {
     self.gigabytes().rotate_left(10)
   }
 
-  fn petabytes(&self) -> i64 where Self:Sized{
+  fn petabytes(&self) -> i64 where Self:Sized {
     self.terabytes().rotate_left(10)
   }
 
