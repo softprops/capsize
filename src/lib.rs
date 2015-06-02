@@ -1,6 +1,6 @@
+use std::convert::Into;
 
-
-trait Capacity {
+pub trait Capacity {
 
   fn bytes(&self) -> i64;
 
@@ -41,17 +41,13 @@ impl Capacity for Size {
   }
 }
 
-struct Size {
+pub struct Size {
   bytes: i64
 }
 
-trait IntoCapacity {
-  fn into(&self) -> Size;
-}
-
-impl IntoCapacity for i64 {
-  fn into(&self) -> Size {
-    Size { bytes: *self }
+impl Into<Size> for i64 {
+  fn into(self) -> Size {
+    Size { bytes: self }
   }
 }
 
