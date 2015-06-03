@@ -1,4 +1,14 @@
 use std::convert::Into;
+use std::str::FromStr;
+
+
+const BYTE: i64 = 1;
+const KILOBYTE: i64 = BYTE << 10;
+const MEGABYTE: i64 = KILOBYTE << 10;
+const GIGABYTE: i64 = MEGABYTE << 10;
+const TERABYTE: i64 = GIGABYTE << 10;
+const PETABYTE: i64 = TERABYTE << 10;
+const EXABYTE: i64 = PETABYTE << 10;
 
 pub trait Capacity {
 
@@ -27,6 +37,33 @@ pub trait Capacity {
   fn exabytes(&self) -> i64 {
     self.petabytes().rotate_left(10)
   }
+
+  fn capacity(&self) -> String {
+    match self.bytes() {
+      small if small < KILOBYTE =>
+        stringify!(small).to_owned(),
+      large => {
+        let units = vec![
+          ('E', EXABYTE),
+          ('P', PETABYTE),
+          ('T', TERABYTE),
+          ('G', GIGABYTE),
+          ('M', MEGABYTE),
+          ('K', KILOBYTE)
+        ];
+        for (suffix, size) in units {
+          if large == size {
+            return format!("1{}", suffix)
+          } else if large > size {
+            let sized = (large as f64) / (size as f64);
+            let round = (sized * 100.0).round() / 100.0;
+            return format!("{:.1}{}", round, suffix)
+          }
+        }
+        unreachable!()
+      }
+    }
+  }
 }
 
 impl Capacity for i64 {
@@ -35,19 +72,27 @@ impl Capacity for i64 {
   }
 }
 
-impl Capacity for Size {
+impl Capacity for Bytes {
   fn bytes(&self) -> i64 {
-    (*self).bytes
+    (*self).size
   }
 }
 
-pub struct Size {
-  bytes: i64
+pub struct Bytes {
+  size: i64
 }
 
-impl Into<Size> for i64 {
-  fn into(self) -> Size {
-    Size { bytes: self }
+impl Into<Bytes> for i64 {
+  fn into(self) -> Bytes {
+    Bytes { size: self }
+  }
+}
+
+
+impl FromStr for Bytes {
+  type Err = String;
+  fn from_str(s: &str) -> Result<Bytes, String> {
+    Err(s.to_owned())
   }
 }
 
@@ -84,4 +129,40 @@ fn test_petabytes() {
 #[test]
 fn test_exabytes() {
   assert_eq!(1.exabytes(), 1152921504606846976)
+}
+
+#[test]
+fn test_kilobytes_capactity() {
+  let half = 1.kilobytes() / 2;
+  assert_eq!((1.kilobytes() + half).capacity(), "1.5K".to_owned())
+}
+
+#[test]
+fn test_megabytes_capactity() {
+  let half = 1.megabytes() / 2;
+  assert_eq!((1.megabytes() + half).capacity(), "1.5M".to_owned())
+}
+
+#[test]
+fn test_gigabytes_capactity() {
+  let half = 1.gigabytes() / 2;
+  assert_eq!((1.gigabytes() + half).capacity(), "1.5G".to_owned())
+}
+
+#[test]
+fn test_terabytes_capactity() {
+  let half = 1.terabytes() / 2;
+  assert_eq!((1.terabytes() + half).capacity(), "1.5T".to_owned())
+}
+
+#[test]
+fn test_petabytes_capactity() {
+  let half = 1.petabytes() / 2;
+  assert_eq!((1.petabytes() + half).capacity(), "1.5P".to_owned())
+}
+
+#[test]
+fn test_exabytes_capactity() {
+  let half = 1.exabytes() / 2;
+  assert_eq!((1.exabytes() + half).capacity(), "1.5E".to_owned())
 }
