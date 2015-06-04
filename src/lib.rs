@@ -92,7 +92,12 @@ impl Into<Bytes> for i64 {
 impl FromStr for Bytes {
   type Err = String;
   fn from_str(s: &str) -> Result<Bytes, String> {
-    Err(s.to_owned())
+    match s {
+      "" | "0" => Ok(Bytes { size: 0 }),
+      _ => {
+        Err(s.to_owned())
+     }
+    }
   }
 }
 
