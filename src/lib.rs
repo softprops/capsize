@@ -1,14 +1,26 @@
 use std::convert::Into;
 use std::str::FromStr;
 
-
-const BYTE: i64 = 1;
-const KILOBYTE: i64 = BYTE << 10;
+const BYTE: i64     = 1;
+const KILOBYTE: i64 = BYTE     << 10;
 const MEGABYTE: i64 = KILOBYTE << 10;
 const GIGABYTE: i64 = MEGABYTE << 10;
 const TERABYTE: i64 = GIGABYTE << 10;
 const PETABYTE: i64 = TERABYTE << 10;
-const EXABYTE: i64 = PETABYTE << 10;
+const EXABYTE: i64  = PETABYTE << 10;
+
+macro_rules! map(
+  { $($key:expr => $value:expr),+ } => {
+    {
+      let mut m = ::std::collections::HashMap::new();
+      $(
+        m.insert($key, $value);
+        )+
+        m
+    }
+  };
+);
+
 
 pub trait Capacity {
 
@@ -78,6 +90,7 @@ impl Capacity for Bytes {
   }
 }
 
+#[derive(Debug)]
 pub struct Bytes {
   size: i64
 }
@@ -88,15 +101,33 @@ impl Into<Bytes> for i64 {
   }
 }
 
-
 impl FromStr for Bytes {
   type Err = String;
   fn from_str(s: &str) -> Result<Bytes, String> {
-    match s {
-      "" | "0" => Ok(Bytes { size: 0 }),
-      _ => {
-        Err(s.to_owned())
-     }
+    let units = map!(
+      'E' => EXABYTE,
+      'P' => PETABYTE,
+      'T' => TERABYTE,
+      'G' => GIGABYTE,
+      'M' => MEGABYTE,
+      'K' => KILOBYTE
+    );
+    let len = s.len();
+    if len > 1 {
+      let last = s.chars().last().unwrap();
+      match units.get(&last) {
+        Some(unit) => {
+          let init: String = s.chars().take(s.chars().count() - 1).collect();
+          init.parse::<i64>().map(|lit| {
+            Bytes { size: lit * unit }
+          }).or_else(|_| Err(s.to_owned()))
+        },
+        _ => {
+          Err(s.to_owned())
+        }
+      }
+    } else {
+      Err(s.to_owned())
     }
   }
 }
@@ -170,4 +201,11 @@ fn test_petabytes_capactity() {
 fn test_exabytes_capactity() {
   let half = 1.exabytes() / 2;
   assert_eq!((1.exabytes() + half).capacity(), "1.5E".to_owned())
+}
+
+#[test]
+fn test_kilobytes_parse() {
+  let cap: String = 1.kilobytes().capacity();
+  let bytes = cap.parse::<Bytes>().ok().unwrap();
+  assert_eq!(bytes.size.capacity(), cap)
 }
