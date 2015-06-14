@@ -127,7 +127,9 @@ impl FromStr for Bytes {
         }
       }
     } else {
-      Err(s.to_owned())
+      s.parse::<i64>().map(|lit| {
+        Bytes { size: lit }
+      }).or_else(|_| Err(s.to_owned()))
     }
   }
 }
