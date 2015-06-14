@@ -112,8 +112,7 @@ impl FromStr for Bytes {
       'M' => MEGABYTE,
       'K' => KILOBYTE
     );
-    let len = s.len();
-    if len > 1 {
+    if s.len() > 1 {
       let last = s.chars().last().unwrap();
       match units.get(&last) {
         Some(unit) => {
