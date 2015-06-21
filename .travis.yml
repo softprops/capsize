@@ -2,14 +2,14 @@ language: rust
 matrix:
   fast_finish: true
   include:
-    - rust: nightly
-    - rust: beta
-    - rust: stable
+  - rust: nightly
+  - rust: beta
+  - rust: stable
 script:
-  - cargo build
-  - cargo test
-  - cargo bench
-  - cargo doc
+- cargo build
+- cargo test
+- cargo bench
+- cargo doc
 after_success: |
   [ $TRAVIS_BRANCH = master ] &&
   [ $TRAVIS_PULL_REQUEST = false ] &&
@@ -18,7 +18,7 @@ after_success: |
   sudo pip install ghp-import &&
   ghp-import -n target/doc &&
   git push -fq https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
-
 env:
   global:
-    secure: CNhd5VNgEwg1uuwoIB6tKn/w9VucjTkfe0qVYXhXISQSsGZNGZ4cnJ72nHUjRTVw+wo19eZBnl2YAd7jiiD/BpjZ9gHy4OWDicS8bBfdjB4FcOMrxNg+lmk/ZIOEfCxFb3GVA6+lGVh/adG8pAsK2KiMaK6Q/YpDYwJyCr5ALluZYPnQ7Uzh20qIiToQ5W3XfWnNvpeLGtrkYW0ANQi/kiEoIxwbsU5iVFa9zOackot77XuuhwTnqfgEoRczI4XGU0wXreF5QKnTixGSLqKu+RDC/heJyfvTYqRypokZ4AusM7fApw1xgRdLFwzofsFsKcbnjC5Q3bV2OGuvaMN3Y+PTQse1FxBvTLw5Mf04zpYQs9GGbNd3hP5OOE3J5FzlLICVHjPV+MNPkFHi0CgZo5TZMsjb7DGhuEj0U2nqiTRukK0hK8z4x7UDLo1M/SHp/n+g89TcblNhwAkbuORMDvLzCCXMoxlqb8bm9iYyZPeP9MVwKjfWD4AGmBKqX4MByzNUvw3VihNkhRF8jthMEduQzEzXM3JcR8K+DioCGRxgqdbiE8ZI5ndcTlkRNVIHIzQxiPTYLnJ1fpQVooTN6XrlJ/oCtAIeBCIWsGe9cDdUA+LKQtZv7bYls2mdp+e/sw6JwuXGtcGzgo9l63dBfijrKEXv5ABlKqsCoYTuW/o=
+  - secure: R7WfOm1U6XVe1YzHX+V5NCqe6qXQs5aJNJUND4VqVStK2S2QvFfTKvGTNWkoVHCL2b78KGZiwqtlKzFa2DnsV2mH2eWCnOmUh+E3DqwZ89CVY1jwSJcZhuodDiaSHQ0qW8YmFrLhsrzMcpQ0iLXRns5x8vdC3r34Wl21b89zE0zpPtLqWbjrDzy71C3miftZpqfR63pqkmaeu2A3RPhojHoTjqEZ1a84x8L0fPjLD1dxX0n7hxt0SLLIBUJXxrcoY/WN/egUl/BRBiMc2wMh/zFIOOTUvCO4ByjHcQqG3FkWpHpSd3c2ud7bKc5r4j75236kErC2vRdGsWGP5csGz3Zm9lPE2HRfi1P9b+qskhwKwXE2td3XzCDdNkWVbiW1RRlA6z1nsDApsNcAkl0HCD2E1D40NoLrpknyk5E3Le6vdYVeffdsvhnzK2WwMznR0nA3GPRCQKEt2owK0Tn/lQXmI1fScRzsltY9tpjx2v5FZMDVcNDGPoDOJcw1k/n3HrhOKpixn1PlDFsDO41E/5qoojA8HEU7Ua5LvLlXhOOhZXLZV3yV2RlGsIUiYDNWmDc0oiWHchrCVPU6rdHwNtafJJQEoYtJrogNkcqWT2mdWKJIhFQFyutIzkwZS9Vga9p9cMqb5Slm82RmEO33VOE5TpifZrDTuSVa5YU0HRw=
+  - secure: d0zl22vgMQ5bmkDbPEXF9pzLMxkcemCfNKZ0UgyTKt/Q8sMgPzJHwKQE1dIQ0bwSkT6OgOIsjzZ6KvneB2T7B9uzaTN1XQ83N6TM2e+OtscQRdcBr4e+BazdAonDrneseLJr3PxX88Y0ivy1DhkxpWJXk5EBi1kIVFyoo0Yn4qXYlD4JYWzEs15hzeyaeGY95dy2Frc/9LcCc3+Fp6zqF7X3cGyHy0GEBWVnVRES5nICCTympQhiQUUsW2F0L+0XA55NNAs80GXTm4lAqjxpQH3zeuek51r0HWNa+w7NzXVObXZirpd+uyY4qn3EnT7xpi/Pwihfk+LKKJSEbhbevpbTXrP4DIu4AJudZRhpw6ErfZSglLi0nPWL4wOMnFfzdDkvTtkV83bC4f/P9tUE2Fnc7/QBOgrIYiB5XWuhkKVMmVfdFX2C2fKz42chsJujdxtffVCpb5i69OsomQkBUkli9uwRXSfU02ky6dqWTM/0S3aaL2+3C29wDjGMVsigOJniHD0kmaAFFieI9ga3C35rcT7IhKN+u4kSbVjlz7MSKXqb6r+CJnTDmQFKIPDr1XCep4tO/3ZLLUaVYyHRANUULpjIRal82+CDpTcxe8lU1vR06MB63XeTH4GOGtc4n85sdmtdu67tir06blkCrcxNhFnXNEVja7eW6XSjd/w=
