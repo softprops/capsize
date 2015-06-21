@@ -1,3 +1,15 @@
+//#![deny(missing_docs)]
+
+//! # Capsize
+//!
+//! Capsize provides conversions between units of capacity,
+//! simlar to [duration](https://doc.rust-lang.org/std/time/duration/), which provides conversions between units of time.
+//!
+//! All conversions are represented as an `i64` by default.
+//!
+//! This crate also provides FromStr implementations that parse values "1k" into
+//! their corresponding capcity in `i64` format.
+
 use std::convert::Into;
 use std::str::FromStr;
 
@@ -22,8 +34,11 @@ macro_rules! map(
 );
 
 
+/// Capacity provides a simple way to convert
+/// values to corresponding units of capacity
 pub trait Capacity {
 
+  ///
   fn bytes(&self) -> i64;
 
   fn kilobytes(&self) -> i64 {
@@ -90,6 +105,9 @@ impl Capacity for Bytes {
   }
 }
 
+/// Bytes is a simple type
+/// to extract a capacity size, in bytes,
+/// from a string value
 #[derive(Debug)]
 pub struct Bytes {
   size: i64

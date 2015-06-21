@@ -1,0 +1,24 @@
+language: rust
+matrix:
+  fast_finish: true
+  include:
+    - rust: nightly
+    - rust: beta
+    - rust: stable
+script:
+  - cargo build
+  - cargo test
+  - cargo bench
+  - cargo doc
+after_success: |
+  [ $TRAVIS_BRANCH = master ] &&
+  [ $TRAVIS_PULL_REQUEST = false ] &&
+  cargo doc &&
+  echo "<meta http-equiv=refresh content=0;url=`echo $TRAVIS_REPO_SLUG | cut -d '/' -f 2`/index.html>" > target/doc/index.html &&
+  sudo pip install ghp-import &&
+  ghp-import -n target/doc &&
+  git push -fq https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
+
+env:
+  global:
+    secure: CNhd5VNgEwg1uuwoIB6tKn/w9VucjTkfe0qVYXhXISQSsGZNGZ4cnJ72nHUjRTVw+wo19eZBnl2YAd7jiiD/BpjZ9gHy4OWDicS8bBfdjB4FcOMrxNg+lmk/ZIOEfCxFb3GVA6+lGVh/adG8pAsK2KiMaK6Q/YpDYwJyCr5ALluZYPnQ7Uzh20qIiToQ5W3XfWnNvpeLGtrkYW0ANQi/kiEoIxwbsU5iVFa9zOackot77XuuhwTnqfgEoRczI4XGU0wXreF5QKnTixGSLqKu+RDC/heJyfvTYqRypokZ4AusM7fApw1xgRdLFwzofsFsKcbnjC5Q3bV2OGuvaMN3Y+PTQse1FxBvTLw5Mf04zpYQs9GGbNd3hP5OOE3J5FzlLICVHjPV+MNPkFHi0CgZo5TZMsjb7DGhuEj0U2nqiTRukK0hK8z4x7UDLo1M/SHp/n+g89TcblNhwAkbuORMDvLzCCXMoxlqb8bm9iYyZPeP9MVwKjfWD4AGmBKqX4MByzNUvw3VihNkhRF8jthMEduQzEzXM3JcR8K+DioCGRxgqdbiE8ZI5ndcTlkRNVIHIzQxiPTYLnJ1fpQVooTN6XrlJ/oCtAIeBCIWsGe9cDdUA+LKQtZv7bYls2mdp+e/sw6JwuXGtcGzgo9l63dBfijrKEXv5ABlKqsCoYTuW/o=
