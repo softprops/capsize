@@ -3,12 +3,12 @@
 //! # Capsize
 //!
 //! Capsize provides conversions between units of capacity,
-//! simlar to [duration](https://doc.rust-lang.org/std/time/duration/), which provides conversions between units of time.
+//! simlar nature to [Duration](https://doc.rust-lang.org/std/time/duration/), which provides conversions between units of time.
 //!
 //! All conversions are represented as an `i64` by default.
 //!
 //! This crate also provides FromStr implementations that parse values "1k" into
-//! their corresponding capcity in `i64` format.
+//! their corresponding capacity in `i64` format.
 
 use std::convert::Into;
 use std::str::FromStr;
