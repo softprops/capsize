@@ -3,12 +3,12 @@
 //! # Capsize
 //!
 //! Capsize provides conversions between units of capacity,
-//! simlar nature to [Duration](https://doc.rust-lang.org/std/time/duration/), which provides conversions between units of time.
+//! similar in nature to [Duration](https://doc.rust-lang.org/std/time/duration/), which provides conversions between units of time.
 //!
 //! All conversions are represented as an `i64` by default.
 //!
 //! This crate also provides FromStr implementations that parse values "1k" into
-//! their corresponding capacity in `i64` format.
+//! their corresponding capacity in `i64` format in bytes.
 
 use std::convert::Into;
 use std::str::FromStr;
@@ -38,33 +38,40 @@ macro_rules! map(
 /// values to corresponding units of capacity
 pub trait Capacity {
 
-  ///
+  /// size in bytes
   fn bytes(&self) -> i64;
 
+  /// size in kilobytes
   fn kilobytes(&self) -> i64 {
     self.bytes().rotate_left(10)
   }
 
+  /// size in megabytes
   fn megabytes(&self) -> i64 {
     self.kilobytes().rotate_left(10)
   }
 
+  /// size in gigabytes
   fn gigabytes(&self) -> i64 {
     self.megabytes().rotate_left(10)
   }
 
+  /// size in terabytes
   fn terabytes(&self) -> i64 {
     self.gigabytes().rotate_left(10)
   }
 
+  /// size in petabytes
   fn petabytes(&self) -> i64 {
     self.terabytes().rotate_left(10)
   }
 
+  /// size in exabytes
   fn exabytes(&self) -> i64 {
     self.petabytes().rotate_left(10)
   }
 
+  /// size as a human readable string
   fn capacity(&self) -> String {
     match self.bytes() {
       small if small < KILOBYTE =>
