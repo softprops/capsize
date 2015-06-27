@@ -9,7 +9,19 @@
 //!
 //! This crate also provides FromStr implementations that parse values "1k" into
 //! their corresponding capacity in `i64` format in bytes.
-
+//!
+//! # Examples
+//!
+//! ```rust
+//! use capsize::Capacity;
+//!
+//! // convert to kilobytes to bytes
+//! let bytes = 4.kilobytes();
+//! assert_eq!(bytes, 4096);
+//!
+//! // resolve 4096 to the closest human readable form
+//! assert_eq!(bytes.capacity(), "4.0K");
+//! ```
 use std::convert::Into;
 use std::str::FromStr;
 
