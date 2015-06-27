@@ -233,5 +233,5 @@ fn test_exabytes_capactity() {
 fn test_kilobytes_parse() {
   let cap: String = 1.kilobytes().capacity();
   let bytes = cap.parse::<Bytes>().ok().unwrap();
-  assert_eq!(bytes.size.capacity(), cap)
+  assert_eq!(bytes.capacity(), cap)
 }
