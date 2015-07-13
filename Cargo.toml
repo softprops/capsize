@@ -2,3 +2,9 @@
 name = "capsize"
 version = "0.1.0"
 authors = ["softprops <d.tangren@gmail.com>"]
+description = "A converter for units of capacity"
+documentation = "http://softprops.github.io/capsize"
+homepage = "https://github.com/softprops/capsize"
+repository = "https://github.com/softprops/capsize"
+keywords = ["conversions", "size"]
+license = "MIT"
