@@ -87,7 +87,7 @@ pub trait Capacity {
   fn capacity(&self) -> String {
     match self.bytes() {
       small if small < KILOBYTE =>
-        stringify!(small).to_owned(),
+        small.to_string() + "B",
       large => {
         let units = vec![
           ('E', EXABYTE),
@@ -142,12 +142,13 @@ impl FromStr for Bytes {
   type Err = String;
   fn from_str(s: &str) -> Result<Bytes, String> {
     let units = map!(
-      'E' => EXABYTE,
-      'P' => PETABYTE,
-      'T' => TERABYTE,
-      'G' => GIGABYTE,
-      'M' => MEGABYTE,
-      'K' => KILOBYTE
+        'E' => EXABYTE,
+        'P' => PETABYTE,
+        'T' => TERABYTE,
+        'G' => GIGABYTE,
+        'M' => MEGABYTE,
+        'K' => KILOBYTE,
+        'B' => 1
     );
     if s.len() > 1 {
       let last = s.chars().last().unwrap();
@@ -206,6 +207,11 @@ fn test_exabytes() {
 }
 
 #[test]
+fn test_bytes_capacity() {
+    assert_eq!(10.capacity(), "10B".to_owned())
+}
+
+#[test]
 fn test_kilobytes_capactity() {
   let half = 1.kilobytes() / 2;
   assert_eq!((1.kilobytes() + half).capacity(), "1.5K".to_owned())
@@ -239,6 +245,13 @@ fn test_petabytes_capactity() {
 fn test_exabytes_capactity() {
   let half = 1.exabytes() / 2;
   assert_eq!((1.exabytes() + half).capacity(), "1.5E".to_owned())
+}
+
+#[test]
+fn test_bytes_parse() {
+  let cap: String = 1.bytes().capacity();
+  let bytes = cap.parse::<Bytes>().ok().unwrap();
+  assert_eq!(bytes.capacity(), cap)
 }
 
 #[test]
